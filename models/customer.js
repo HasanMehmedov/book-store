@@ -3,6 +3,10 @@ const mongoose = require('mongoose');
 const NAME_REGEX = /^[A-Za-z][a-z]+$/;
 const PHONE_NUMBER_REGEX = /^\d{6,8}$/;
 const EMAIL_REGEX = /^\w[\w-\.]*\w@\w[\w-]*\.[\w]{2,4}$/;
+const INVALID_FIRST_NAME_MESSAGE = 'Invalid first name.';
+const INVALID_LAST_NAME_MESSAGE = 'Invalid last name.';
+const INVALID_EMAIL_ADDRESS_MESSAGE = 'Invalid email address.';
+const INVALID_PHONE_NUMBER_MESSAGE = 'Invalid phone number.';
 
 const customerSchema = new mongoose.Schema({
     firstName: {
@@ -12,7 +16,7 @@ const customerSchema = new mongoose.Schema({
         maxlenght: 100,
         validate: {
             validator: function (v) { return v && v.match(NAME_REGEX); },
-            message: 'Invalid first name.'
+            message: INVALID_FIRST_NAME_MESSAGE
 
         }
     },
@@ -23,7 +27,7 @@ const customerSchema = new mongoose.Schema({
         maxlength: 100,
         validate: {
             validator: function (v) { return v && v.match(NAME_REGEX); },
-            message: 'Invalid last name.'
+            message: INVALID_LAST_NAME_MESSAGE
         }
     },
     email: {
@@ -32,7 +36,7 @@ const customerSchema = new mongoose.Schema({
         maxlength: 255,
         validate: {
             validator: function (v) { return v && v.match(EMAIL_REGEX); },
-            message: 'Invalid email address.'
+            message: INVALID_EMAIL_ADDRESS_MESSAGE
         }
     },
     phone: {
@@ -42,7 +46,7 @@ const customerSchema = new mongoose.Schema({
         maxlength: 8,
         validate: {
             validator: function (v) { return v && v.match(PHONE_NUMBER_REGEX); },
-            message: 'Invalid phone number.'
+            message: INVALID_PHONE_NUMBER_MESSAGE
         }
     },
     isGold: {
@@ -59,7 +63,7 @@ function validateCustomer(params) {
             .error(errors => {
                 errors.forEach(error => {
                     if (error.code === 'string.pattern.base') {
-                        error.message = 'Invalid first name.';
+                        error.message = INVALID_FIRST_NAME_MESSAGE;
                     }
                 });
 
@@ -69,18 +73,27 @@ function validateCustomer(params) {
             .error(errors => {
                 errors.forEach(error => {
                     if (error.code === 'string.pattern.base') {
-                        error.message = 'Invalid last name.';
+                        error.message = INVALID_LAST_NAME_MESSAGE;
                     }
                 });
 
                 return errors;
             }),
-        email: Joi.string().min(5).max(255).email(),
+        email: Joi.string().min(5).max(255).regex(new RegExp(EMAIL_REGEX)).email()
+            .error(errors => {
+                errors.forEach(error => {
+                    if (error.code === 'string.pattern.base') {
+                        error.message = INVALID_EMAIL_ADDRESS_MESSAGE;
+                    }
+                });
+
+                return errors;
+            }),
         phone: Joi.string().min(6).max(8).regex(new RegExp(PHONE_NUMBER_REGEX)).required()
             .error(errors => {
                 errors.forEach(error => {
                     if (error.code === 'string.pattern.base') {
-                        error.message = 'Invalid phone number.';
+                        error.message = INVALID_PHONE_NUMBER_MESSAGE;
                     }
                 });
 
