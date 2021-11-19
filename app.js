@@ -3,10 +3,12 @@ const app = express();
 const mongoose = require('mongoose');
 const home = require('./routes/home');
 const books = require('./routes/books');
+const customers = require('./routes/customers');
 
 app.use(express.json());
 app.use('/', home);
 app.use('/api/books', books);
+app.use('/api/customers', customers);
 
 mongoose.connect('mongodb://localhost/book-store', { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Successfully connected to MongoDB...'))
