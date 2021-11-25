@@ -30,7 +30,8 @@ const bookSchema = new mongoose.Schema({
         type: Number,
         required: true,
         min: 0,
-        max: 300
+        max: 300,
+        default: 0
     }
 });
 
@@ -50,7 +51,7 @@ function validateBook(params) {
                 return errors;
             }),
         price: Joi.number().min(0).max(200).required(),
-        numberInStock: Joi.number().min(0).max(300).required()
+        numberInStock: Joi.number().min(0).max(300)
     });
 
     const { error } = validationSchema.validate(params);
