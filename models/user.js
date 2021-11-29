@@ -1,5 +1,6 @@
 const Joi = require('joi');
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
 const NAME_REGEX = /^[A-Za-z][a-z]+( [A-Za-z][a-z]+)?$/;
 const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 const HASHED_PASSWORD_REGEX = /\$2[ayb]\$.{56}/;
@@ -47,6 +48,13 @@ const userSchema = new mongoose.Schema({
         default: false
     }
 });
+
+userSchema.methods.generateAuthToken = function () {
+
+    const token = jwt.sign({ _id: this._id, name: this.name, email: this.email, isAdmin: this.isAdmin }, 'jwtPrivateKey');
+
+    return token;
+}
 
 const User = mongoose.model('User', userSchema);
 

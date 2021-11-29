@@ -20,7 +20,9 @@ router.post('/', async (req, res) => {
         const hashedPassword = user.password;
         await validatePassword(password, hashedPassword);
 
-        res.send({ _id: user._id, name: user.name, email: user.email, isAdmin: user.isAdmin });
+        const token = user.generateAuthToken();
+
+        res.header('x-auth-token', token).send({ _id: user._id, name: user.name, email: user.email, isAdmin: user.isAdmin });
     }
     catch (err) {
         res.status(err.status).send(err.message);
