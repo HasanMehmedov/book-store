@@ -2,6 +2,7 @@ const Joi = require('joi');
 const mongoose = require('mongoose');
 const NAME_REGEX = /^[A-Za-z][a-z]+( [A-Za-z][a-z]+)?$/;
 const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+const HASHED_PASSWORD_REGEX = /\$2[ayb]\$.{56}/;
 const EMAIL_REGEX = /^\w[\w-\.]*\w@\w[\w-]*\.[\w]{2,4}$/;
 const INVALID_NAME_MESSAGE = 'Invalid name.';
 const INVALID_PASSWORD_MESSAGE = 'Invalid password.';
@@ -36,7 +37,7 @@ const userSchema = new mongoose.Schema({
         minlength: 8,
         maxlength: 1024,
         validate: {
-            validator: function (v) { return v && v.match(PASSWORD_REGEX); },
+            validator: function (v) { return v && v.match(HASHED_PASSWORD_REGEX); },
             message: INVALID_PASSWORD_MESSAGE
         }
     },
