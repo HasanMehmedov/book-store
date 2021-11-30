@@ -1,9 +1,10 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const { User, validate } = require('../models/user');
+const auth = require('../middlewares/auth');
 const router = express.Router();
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
 
     const params = req.body;
 

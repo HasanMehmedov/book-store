@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const { Purchase, validate } = require('../models/purchase');
 const { Customer } = require('../models/customer');
 const { Book } = require('../models/book');
+const auth = require('../middlewares/auth');
 const router = express.Router();
 
 Fawn.init(mongoose);
@@ -19,7 +20,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
 
     const params = req.body;
 
