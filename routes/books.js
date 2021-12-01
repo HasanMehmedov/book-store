@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const { Book, validate } = require('../models/book');
 const auth = require('../middlewares/auth');
+const admin = require('../middlewares/admin');
 const router = express.Router();
 
 router.get('/', async (req, res) => {
@@ -57,7 +58,7 @@ router.put('/:id', auth, async (req, res) => {
     }
 });
 
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', [auth, admin], async (req, res) => {
 
     const id = req.params.id;
 
