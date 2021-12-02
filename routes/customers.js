@@ -7,41 +7,26 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
 
-    try {
-        const customers = await getCustomers();
-        res.send(customers);
-    }
-    catch (err) {
-        res.status(err.status).send(err.message);
-    }
+    const customers = await getCustomers();
+    res.send(customers);
 });
 
 router.get('/:id', async (req, res) => {
 
     const id = req.params.id;
 
-    try {
-        const customer = await getCustomer(id);
-        res.send(customer);
-    }
-    catch (err) {
-        res.status(err.status).send(err.message);
-    }
+    const customer = await getCustomer(id);
+    res.send(customer);
 });
 
 router.post('/', auth, async (req, res) => {
 
     const params = req.body;
 
-    try {
-        validate(params);
+    validate(params);
 
-        const result = await createCustomer(params);
-        res.send(result);
-    }
-    catch (err) {
-        res.status(err.status).send(err.message);
-    }
+    const result = await createCustomer(params);
+    res.send(result);
 });
 
 router.put('/:id', auth, async (req, res) => {
@@ -49,26 +34,16 @@ router.put('/:id', auth, async (req, res) => {
     const id = req.params.id;
     const params = req.body;
 
-    try {
-        const result = await updateCustomer(id, params);
-        res.send(result);
-    }
-    catch (err) {
-        res.status(err.status).send(err.message);
-    }
+    const result = await updateCustomer(id, params);
+    res.send(result);
 });
 
 router.delete('/:id', [auth, admin], async (req, res) => {
 
     const id = req.params.id;
 
-    try {
-        const result = await deleteCustomer(id);
-        res.send(result);
-    }
-    catch (err) {
-        res.status(err.status).send(err.message);
-    }
+    const result = await deleteCustomer(id);
+    res.send(result);
 });
 
 async function getCustomers() {
@@ -137,7 +112,7 @@ async function updateCustomer(id, params) {
 
     customer.set({
         firstName: params.firstName,
-        lastName: params. lastName,
+        lastName: params.lastName,
         email: params.email,
         phone: params.phone,
         isGold: params.isGold
@@ -157,7 +132,7 @@ async function deleteCustomer(id) {
 
 function validateId(id) {
 
-    if(!mongoose.Types.ObjectId.isValid(id)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
         const invalidIdError = new Error('Invalid customer id.');
         invalidIdError.status = 400;
         throw invalidIdError;

@@ -1,4 +1,5 @@
 const express = require('express');
+require('express-async-errors');
 const app = express();
 const mongoose = require('mongoose');
 const config = require('config');
@@ -8,6 +9,7 @@ const customers = require('./routes/customers');
 const purchases = require('./routes/purchases');
 const users = require('./routes/users');
 const auth = require('./routes/auth');
+const error = require('./middlewares/error');
 
 app.use(express.json());
 app.use('/', home);
@@ -16,6 +18,7 @@ app.use('/api/customers', customers);
 app.use('/api/purchases', purchases);
 app.use('/api/users', users);
 app.use('/api/auth', auth);
+app.use(error);
 
 if(!config.get('jwtPrivateKey')) {
     console.error('jwtPrivateKey is not defined.');

@@ -7,41 +7,26 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
 
-    try {
-        const books = await getBooks();
-        res.send(books);
-    }
-    catch (err) {
-        res.status(err.status).send(err.message);
-    }
+    const books = await getBooks();
+    res.send(books);
 });
 
 router.get('/:id', async (req, res) => {
 
     const id = req.params.id;
 
-    try {
-        const book = await getBook(id);
-        res.send(book);
-    }
-    catch (err) {
-        res.status(err.status).send(err.message);
-    }
+    const book = await getBook(id);
+    res.send(book);
 });
 
 router.post('/', auth, async (req, res) => {
 
     const params = req.body;
 
-    try {
-        validate(params);
+    validate(params);
 
-        const result = await createBook(params);
-        res.send(result);
-    }
-    catch (err) {
-        res.status(err.status).send(err.message);
-    }
+    const result = await createBook(params);
+    res.send(result);
 });
 
 router.put('/:id', auth, async (req, res) => {
@@ -49,26 +34,16 @@ router.put('/:id', auth, async (req, res) => {
     const id = req.params.id;
     const params = req.body;
 
-    try {
-        const result = await updateBook(id, params);
-        res.send(result);
-    }
-    catch (err) {
-        res.status(err.status).send(err.message);
-    }
+    const result = await updateBook(id, params);
+    res.send(result);
 });
 
 router.delete('/:id', [auth, admin], async (req, res) => {
 
     const id = req.params.id;
 
-    try {
-        const result = await deleteBook(id);
-        res.send(result);
-    }
-    catch (err) {
-        res.status(err.status).send(err.message);
-    }
+    const result = await deleteBook(id);
+    res.send(result);
 });
 
 async function getBooks() {

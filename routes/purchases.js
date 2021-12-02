@@ -11,34 +11,24 @@ Fawn.init(mongoose);
 
 router.get('/', async (req, res) => {
 
-    try {
-        const purchases = await getPurchases();
-        res.send(purchases);
-    }
-    catch (err) {
-        res.status(err.status).send(err.message);
-    }
+    const purchases = await getPurchases();
+    res.send(purchases);
 });
 
 router.post('/', auth, async (req, res) => {
 
     const params = req.body;
 
-    try {
-        const customerId = params.customerId;
-        const customer = await getCustomer(customerId);
+    const customerId = params.customerId;
+    const customer = await getCustomer(customerId);
 
-        const bookId = params.bookId;
-        const book = await getBook(bookId);
+    const bookId = params.bookId;
+    const book = await getBook(bookId);
 
-        validate(params);
+    validate(params);
 
-        const result = await createPurchase(book, customer);
-        res.send(result);
-    }
-    catch (err) {
-        res.status(err.status).send(err.message);
-    }
+    const result = await createPurchase(book, customer);
+    res.send(result);
 });
 
 async function getPurchases() {

@@ -10,23 +10,18 @@ router.post('/', async (req, res) => {
 
     const params = req.body;
 
-    try {
-        validateAuth(params);
+    validateAuth(params);
 
-        const email = params.email;
-        const user = await validateEmail(email);
+    const email = params.email;
+    const user = await validateEmail(email);
 
-        const password = params.password;
-        const hashedPassword = user.password;
-        await validatePassword(password, hashedPassword);
+    const password = params.password;
+    const hashedPassword = user.password;
+    await validatePassword(password, hashedPassword);
 
-        const token = user.generateAuthToken();
+    const token = user.generateAuthToken();
 
-        res.header('x-auth-token', token).send({ _id: user._id, name: user.name, email: user.email, isAdmin: user.isAdmin });
-    }
-    catch (err) {
-        res.status(err.status).send(err.message);
-    }
+    res.header('x-auth-token', token).send({ _id: user._id, name: user.name, email: user.email, isAdmin: user.isAdmin });
 });
 
 function validateAuth(auth) {
